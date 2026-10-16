@@ -51,8 +51,6 @@ git lfs install
 git clone https://huggingface.co/nvidia/nemotron-3.5-asr-streaming-0.6b
 ```
 
-> **Nunca clone este repositório do modelo dentro do repositório do projeto** — o `.gitignore` já ignora a pasta `ModeloIA/` e os formatos de pesos, para evitar envios gigantes ao GitHub.
-
 ## 3. Onde colocar o arquivo
 
 O script `iniciar.sh` procura o modelo por padrão em:
