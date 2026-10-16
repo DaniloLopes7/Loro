@@ -25,8 +25,8 @@ if [ ! -x "$NEMO" ]; then
 fi
 if [ ! -f "$MODELO" ]; then
   echo "[erro] modelo GGUF não encontrado: $MODELO"
-  echo "       baixe o modelo conforme docs/modelo.md (Hugging Face,"
-  echo "       ~742 MB) e salve em modelo/, ou aponte com MODELO=/caminho/arquivo.gguf"
+  echo "       baixe o modelo conforme a seção \"O Modelo\" do README"
+  echo "       e salve em modelo/, ou aponte com MODELO=/caminho/arquivo.gguf"
   exit 1
 fi
 if [ ! -x "$DIR/.venv/bin/python" ]; then
