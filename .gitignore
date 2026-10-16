@@ -1,0 +1,12 @@
+.venv/
+__pycache__/
+*.pyc
+*.gguf
+*.nemo
+*.safetensors
+modelo/
+ModeloIA/
+*.log
+nohup.out
+.DS_Store
+Thumbs.db

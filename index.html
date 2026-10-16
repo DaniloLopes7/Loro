@@ -1,0 +1,242 @@
+<!doctype html>
+<html lang="pt-BR" data-tema="escuro">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Vox. — Transcrição de voz em tempo real</title>
+<meta name="description" content="Sinal Silencioso — transcrição de voz em tempo real. Motor ASR local em CPU (NVIDIA Nemotron 3.5).">
+<meta name="theme-color" content="#0E0E0E">
+<script>
+(function () {
+  try {
+    var t = localStorage.getItem("vox-tema");
+    if (t !== "claro" && t !== "escuro") {
+      t = window.matchMedia("(prefers-color-scheme: light)").matches ? "claro" : "escuro";
+    }
+    document.documentElement.dataset.tema = t;
+  } catch (e) {
+    document.documentElement.dataset.tema = "escuro";
+  }
+})();
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cdefs%3E%3CradialGradient id='g' cx='0.44' cy='0.42' r='0.75'%3E%3Cstop offset='0' stop-color='%238CF5B8'/%3E%3Cstop offset='.42' stop-color='%232FD47A'/%3E%3Cstop offset='1' stop-color='%230F9A52'/%3E%3C/radialGradient%3E%3C/defs%3E%3Ccircle cx='16' cy='16' r='11' fill='url(%23g)'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<section id="view-home" class="view ativa">
+  <header class="cabecalho">
+    <span class="marca">Vox.</span>
+    <div class="cabecalho-acoes">
+      <button class="btn-texto btn-tema" type="button" aria-label="Alternar tema">Escuro</button>
+    </div>
+  </header>
+
+  <div class="pagina">
+    <div class="hero home-hero">
+      <h1 class="home-titulo">Vox ao Vivo</h1>
+      <canvas id="orb-home" class="esfera" width="340" height="340" aria-hidden="true"></canvas>
+      <p id="home-estado" class="estado-esfera">Pronto para ouvir</p>
+      <p class="lema">Leitura do audio em tempo real.</p>
+    </div>
+
+    <div class="painel-acoes">
+      <button id="btn-criar" class="btn primario">Criar sala nesta tela</button>
+
+      <div class="divisor"><span>ou entre em uma sala existente</span></div>
+
+      <div class="linha-campos">
+        <input id="inp-codigo" class="campo codigo" maxlength="4" inputmode="text"
+               autocomplete="off" autocapitalize="characters" placeholder="CÓDIGO"
+               aria-label="Código da sala">
+        <input id="inp-nome" class="campo" maxlength="24" autocomplete="off"
+               placeholder="Seu nome (opcional)" aria-label="Seu nome">
+      </div>
+      <div class="linha-botoes">
+        <button id="btn-falar" class="btn secundario">Entrar para falar</button>
+        <button id="btn-assistir" class="btn contorno">Assistir</button>
+      </div>
+    </div>
+
+    <dl class="metadados home-meta" aria-label="Informações do sistema">
+      <div class="metadado">
+        <dt>Motor</dt>
+        <dd>NVIDIA Nemotron 3.5 ASR · 600M parâmetros · CPU local</dd>
+      </div>
+      <div class="metadado">
+        <dt>Privacidade</dt>
+        <dd>Áudio processado localmente — sem nuvem de IA</dd>
+      </div>
+      <div class="metadado">
+        <dt>Modo</dt>
+        <dd>O celular vira o microfone; o telão exibe a transcrição</dd>
+      </div>
+    </dl>
+
+    <section class="estados" aria-label="Estados da voz">
+      <div class="estados-cab">
+        <h2>Estados da voz</h2>
+        <p class="meta">Quatro estados. Uma única presença.</p>
+      </div>
+      <div class="estados-faixa">
+        <span class="estados-rotulo" aria-hidden="true"></span>
+        <div class="estados-grade">
+          <figure class="estado-painel">
+            <img src="assets/orb/orb-pronto.svg" alt="Esfera verde, praticamente imóvel">
+            <figcaption>01 — Pronto</figcaption>
+          </figure>
+          <figure class="estado-painel">
+            <img src="assets/orb/orb-ouvindo.svg" alt="Esfera verde com ondas que respondem ao áudio">
+            <figcaption>02 — Ouvindo</figcaption>
+          </figure>
+          <figure class="estado-painel">
+            <img src="assets/orb/orb-processando.svg" alt="Esfera verde com anel tracejado em rotação">
+            <figcaption>03 — Processando</figcaption>
+          </figure>
+          <figure class="estado-painel">
+            <img src="assets/orb/orb-pausado.svg" alt="Esfera em escala de cinza, sem movimento">
+            <figcaption>04 — Pausado</figcaption>
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <footer class="rodape-home">
+      <p class="lema">Vox ao Vivo — demonstração de transcrição local · Danilo Almeida Lopes</p>
+    </footer>
+  </div>
+</section>
+
+<section id="view-telao" class="view">
+  <header class="cabecalho">
+    <span class="marca">Vox.</span>
+    <div class="cabecalho-acoes">
+      <span class="sala-chip">
+        <span class="sala-rotulo">Sala</span>
+        <span id="telao-codigo" class="sala-codigo">····</span>
+      </span>
+      <button id="btn-copiar-link" class="btn-texto" type="button">Copiar link</button>
+      <span id="telao-status" class="status" aria-live="polite">aguardando locutor</span>
+      <button class="btn-texto btn-tema" type="button" aria-label="Alternar tema">Escuro</button>
+    </div>
+  </header>
+
+  <main class="pagina telao-pagina">
+    <div class="telao-topo">
+      <div class="hero hero-telao">
+        <canvas id="orb-telao" class="esfera" width="340" height="340" aria-hidden="true"></canvas>
+        <p id="telao-orbtexto" class="estado-esfera" aria-live="polite">Pronto para ouvir</p>
+        <p class="assinatura"></p>
+      </div>
+      <aside id="painel-sala" class="painel-sala">
+        <p class="painel-sala-titulo">Entre pelo celular</p>
+        <div id="qrcode" class="qr" aria-label="QR Code da sala"></div>
+        <p class="meta">Aponte a câmera — o celular vira o microfone da sala</p>
+        <p id="aviso-local" class="aviso oculto">
+          Você abriu via <code>localhost</code> — para o celular participar, abra este
+          telão usando o link <code>https://</code> gerado por <code>./expor.sh</code>.
+        </p>
+      </aside>
+    </div>
+
+    <div class="controles" role="group" aria-label="Ações da transcrição">
+      <button id="btn-copiar" class="btn secundario" disabled>Copiar transcrição</button>
+      <button id="btn-baixar" class="btn secundario" disabled>Baixar .txt</button>
+      <button id="btn-nova-sala" class="btn contorno">Nova sala</button>
+    </div>
+
+    <section class="transcricao" aria-label="Transcrição">
+      <header class="transcricao-cab">
+        <h2>Transcrição</h2>
+        <span id="transcricao-estado" class="meta">Aguardando áudio</span>
+      </header>
+      <div id="chat-lista" class="transcricao-lista">
+        <p id="chat-vazio" class="vazio">As palavras aparecerão aqui.</p>
+      </div>
+    </section>
+
+    <dl class="metadados telao-meta" aria-label="Metadados da transcrição">
+      <div class="metadado" hidden>
+        <dt>Estado</dt>
+        <dd id="meta-estado">aguardando</dd>
+      </div>
+      <div class="metadado" hidden>
+        <dt>Duração</dt>
+        <dd id="meta-duracao">00:00</dd>
+      </div>
+      <div class="metadado" hidden>
+        <dt>Idioma</dt>
+        <dd id="meta-idioma">—</dd>
+      </div>
+      <div class="metadado" hidden>
+        <dt>Motor</dt>
+        <dd>Nemotron 3.5 ASR · CPU local</dd>
+      </div>
+      <div class="metadado" hidden>
+        <dt>Privacidade</dt>
+        <dd>Processamento local</dd>
+      </div>
+      <div class="metadado" hidden>
+        <dt>Latência final</dt>
+        <dd id="meta-latencia">—</dd>
+      </div>
+      <div class="metadado" hidden>
+        <dt>Velocidade</dt>
+        <dd id="meta-velocidade">—</dd>
+      </div>
+      <div class="metadado" hidden>
+        <dt>Frases</dt>
+        <dd id="meta-frases">0</dd>
+      </div>
+      <div class="metadado" hidden>
+        <dt>Na sala</dt>
+        <dd id="meta-participantes">1</dd>
+      </div>
+    </dl>
+  </main>
+</section>
+
+<section id="view-falar" class="view">
+  <header class="cabecalho">
+    <span class="marca">Vox.</span>
+    <div class="cabecalho-acoes">
+      <span class="sala-chip">
+        <span class="sala-rotulo">Sala</span>
+        <span id="falar-codigo" class="sala-codigo">····</span>
+      </span>
+      <span id="falar-status" class="status" aria-live="polite">conectando</span>
+      <button class="btn-texto btn-tema" type="button" aria-label="Alternar tema">Escuro</button>
+      <button id="btn-sair" class="btn-texto" type="button" aria-label="Sair da sala">Sair</button>
+    </div>
+  </header>
+
+  <div class="falar-centro">
+    <div class="hero hero-falar">
+      <canvas id="orb-falar" class="esfera" width="272" height="272" aria-hidden="true"></canvas>
+      <p id="falar-orbtexto" class="estado-esfera" aria-live="polite">Pronto para ouvir</p>
+      <p class="assinatura">Sinal Silencioso</p>
+    </div>
+    <div id="falar-feed" class="transcricao-lista transcricao-lista--compacta"></div>
+  </div>
+
+  <footer class="falar-comandos">
+    <label class="linha-switch">
+      <span>Fala livre</span>
+      <button id="toggle-livre" class="switch" role="switch" aria-checked="false" aria-label="Fala livre">
+        <span class="switch-bola"></span>
+      </button>
+    </label>
+    <button id="btn-ptt" class="ptt" type="button">Segure para falar</button>
+    <p id="ptt-dica" class="meta">segure para falar · use a fala livre para mãos livres</p>
+  </footer>
+</section>
+
+<div id="toasts" aria-live="polite"></div>
+
+<script src="js/qrcode.min.js"></script>
+<script type="module" src="js/app.js"></script>
+</body>
+</html>
