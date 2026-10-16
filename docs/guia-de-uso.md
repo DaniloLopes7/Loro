@@ -31,7 +31,7 @@ Para encerrar: `Ctrl+C` no terminal do `iniciar.sh` (ele derruba os dois process
 
 ---
 
-## 2. Demonstração com celular (modo sala)
+## 2. Ativar o CloudFlare Tunnel
 
 É o modo de apresentação: **celular = microfone, PC = telão**.
 
