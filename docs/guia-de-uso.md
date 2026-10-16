@@ -33,8 +33,6 @@ Para encerrar: `Ctrl+C` no terminal do `iniciar.sh` (ele derruba os dois process
 
 ## 2. Ativar o CloudFlare Tunnel
 
-É o modo de apresentação: **celular = microfone, PC = telão**.
-
 ```bash
 ./expor.sh
 ```
@@ -42,17 +40,7 @@ Para encerrar: `Ctrl+C` no terminal do `iniciar.sh` (ele derruba os dois process
 O `expor.sh`:
 
 1. Garante a aplicação de pé (chama `iniciar.sh` se preciso);
-2. Abre um **Cloudflare Tunnel** e imprime o link público `https://…trycloudflare.com` (com QR Code no próprio terminal).
-
-Roteiro da demo:
-
-1. **PC:** abra o link público no navegador → **"Criar sala nesta tela"**. O telão exibe: código da sala (4 letras), QR Code grande, a esfera de voz e a área de transcrição.
-2. **Celular:** escaneie o QR → o navegador abre já no modo "falar" → autorize o microfone.
-3. **Fale:**
-   - **Segurar para falar** (push-to-talk): pressione e segure a pílula, fale, solte — a frase se finaliza ao soltar;
-   - ou ative **"Fala livre"** para falar continuamente (o motor detecta o fim de cada frase pelo silêncio).
-4. **Telão:** acompanhe o texto parcial se formando (itálico, com cursor) e a consolidação da frase com nome e horário. No rodapé: quantidade de frases, **latência de finalização** e **velocidade do motor** (× tempo real).
-5. Ao final: **"Copiar"** (área de transferência) ou **"Baixar .txt"**.
+2. Abre um **Tunnel** e imprime o link público `https://…trycloudflare.com`.
 
 Observações:
 
