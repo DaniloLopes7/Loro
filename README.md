@@ -1,12 +1,12 @@
 <p align="center">
-  <img src="assets/orb/orb-pronto.svg" width="140" alt="Vox — Pronto">
+  <img src="assets/orb/orb-pronto.svg" width="140" alt="Loro — Pronto">
 </p>
 
-<h1 align="center">Vox</h1>
+<h1 align="center">Loro</h1>
 
 <p align="center">
-  <b>Transcrição de voz ao vivo na sala.</b><br>
-  Fale pelo celular e veja o texto aparecer palavra por palavra no telão — reconhecimento 100% local, em CPU, sem nuvem de IA.
+  <b>Transcrição de voz ao vivo </b><br>
+  Fale pelo celular e veja o texto aparecer palavra por palavra no telão — reconhecimento 100% local, em CPU, sem nuvem de IA
 </p>
 
 <p align="center">
@@ -35,11 +35,10 @@
 
 ---
 
-## O que o Vox faz
+## O que o Loro faz
 
-O **Vox** é um demonstrativo de ditado por voz em tempo real. O celular captura o microfone, envia o áudio de forma segura e o telão da sala exibe a transcrição ao vivo, palavra por palavra — tudo reconhecido localmente em CPU, sem enviar áudio para serviços de nuvem de IA.
-
-O fluxo acontece dentro de uma **sala**: quem cria a sala vira o telão, e quem entra pelo QR Code vira o locutor. O texto do locutor surge na tela à medida que é finalizado pelo motor de reconhecimento, com pontuação, nome do locutor, horário e métricas de desempenho (latência de finalização e velocidade relativa ao tempo real).
+O **Loro** é um demonstrativo de ditado por voz em tempo real. O celular captura o áudio, gera e envia um arquivo de áudio de forma segura e o telão da sala exibe a transcrição ao vivo, palavra por palavra — tudo reconhecido localmente em CPU, sem enviar áudio para serviços de nuvem de IA. 
+O fluxo acontece dentro de uma **sala**: quem cria a sala assume a função do telão, e quem entra pelo QR Code se transforma em locutor. A transcrição da fala do locutor surge na tela à medida que é finalizada pelo motor de reconhecimento, com pontuação, nome do locutor, horário e métricas de desempenho (latência de finalização e velocidade relativa ao tempo real).
 
 ---
 
@@ -56,7 +55,7 @@ O motor de reconhecimento de voz utiliza o **Nemotron** (NVIDIA), um modelo de A
 | Artefato da demo | GGUF q8_0 (~742 MB) — fine-tune pt-BR, não distribuído |
 | Formato de execução | GGUF quantizado **q8_0** (roda em CPU, sem GPU) |
 
-O modelo base reconhecia apenas **inglês**. Para habilitar o reconhecimento de **português brasileiro**, foi realizado **fine-tuning utilizando o dataset [CORAA](https://github.com/nilc-nlp/CORAA)** (*Corpus of Annotated Audios*), um corpus brasileiro de áudio transcrito.
+O modelo base reconhecia apenas **Inglês**. Para habilitar o reconhecimento de **português brasileiro**, foi realizado **fine-tuning utilizando o dataset [CORAA](https://github.com/nilc-nlp/CORAA)** (*Corpus of Annotated Audios*), um corpus brasileiro de áudio transcrito.
 
 ### Treinamento
 
