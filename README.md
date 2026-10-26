@@ -37,7 +37,7 @@
 
 ## O que o Loro faz
 
-O **Loro** é um demonstrativo de ditado por voz em tempo real. O celular captura o áudio, gera e envia um arquivo de áudio de forma segura e o telão da sala exibe a transcrição ao vivo, palavra por palavra — tudo reconhecido localmente em CPU, sem enviar áudio para serviços de nuvem de IA. 
+O **Loro** é um demonstrativo de ditado por voz em tempo real. O celular captura a fala, gera e envia um arquivo de áudio de forma segura e o telão da sala exibe a transcrição ao vivo, palavra por palavra — tudo reconhecido localmente em CPU, sem enviar áudio para serviços de nuvem de IA. 
 O fluxo acontece dentro de uma **sala**: quem cria a sala assume a função do telão, e quem entra pelo QR Code se transforma em locutor. A transcrição da fala do locutor surge na tela à medida que é finalizada pelo motor de reconhecimento, com pontuação, nome do locutor, horário e métricas de desempenho (latência de finalização e velocidade relativa ao tempo real).
 
 ---
@@ -55,14 +55,14 @@ O motor de reconhecimento de voz utiliza o **Nemotron** (NVIDIA), um modelo de A
 | Artefato da demo | GGUF q8_0 (~742 MB) — fine-tune pt-BR, não distribuído |
 | Formato de execução | GGUF quantizado **q8_0** (roda em CPU, sem GPU) |
 
-O modelo base reconhecia apenas **Inglês**. Para habilitar o reconhecimento de **português brasileiro**, foi realizado **fine-tuning utilizando o dataset [CORAA](https://github.com/nilc-nlp/CORAA)** (*Corpus of Annotated Audios*), um corpus brasileiro de áudio transcrito.
+O modelo base reconhecia apenas **Inglês**. Para habilitar o reconhecimento de **Português Brasileiro**, foi realizado **fine-tuning utilizando o dataset [CORAA](https://github.com/nilc-nlp/CORAA)** (*Corpus of Annotated Audios*), um corpus brasileiro de áudio transcrito.
 
 ### Treinamento
 
 O fine-tuning foi executado no **Google Colab Pro** (GPU). Após o treino, o modelo foi convertido e quantizado para o formato **GGUF q8_0** (~742 MB) e executado localmente pelo runtime nativo **[NeMo-Speech.cpp](https://github.com/NVIDIA/NeMo-Speech.cpp)**, sem frameworks pesados de deep learning.
 
-> ⚠️ **O modelo treinado em português brasileiro não está disponível para download.**<br>
-> Este projeto é um **demonstrativo de tecnologia** e **não um projeto finalizado**; os pesos do fine-tuning não são distribuídos. O download indicado em [Requisitos](#requisitos) é o modelo base oficial (só-inglês), útil para estudar o pipeline.
+> ⚠️ **O modelo treinado em Português Brasileiro não está disponível para download.**<br>
+> Este projeto é um **demonstrativo de tecnologia** e **não um projeto finalizado**; os pesos do fine-tuning não são distribuídos. O download indicado em [Requisitos](#requisitos) é o modelo base oficial (só-Inglês), útil para estudar o pipeline.
 
 ### Configuração de inferência
 
@@ -177,7 +177,7 @@ A pasta `modelo/` está no `.gitignore` — o arquivo nunca será commitado.
 ./iniciar.sh
 ```
 
-O script sobe o **motor ASR** em `127.0.0.1:8080` (a primeira carga do modelo leva ~30–60 s) e a **aplicação** em `http://localhost:8300`. Abra **http://localhost:8300** → **"Criar sala nesta tela"**. Essa tela vira o telão. Para encerrar tudo, `Ctrl+C` no terminal.
+O script sobe o **motor ASR** em `127.0.0.1:8080` (a primeira carga do modelo leva ~30–60 s) e a **aplicação** em `http://localhost:8300`. Abra **http://localhost:8300** → **"Criar sala nesta tela"**. Essa tela se torna o telão. Para encerrar tudo, `Ctrl+C` no terminal.
 
 ### Demonstração com celular (modo sala)
 
