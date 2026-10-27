@@ -38,7 +38,7 @@ fi
 if curl -sf "http://127.0.0.1:${PORTA_MOTOR}/ready" >/dev/null 2>&1; then
   echo "[vox] motor ASR já está no ar (:${PORTA_MOTOR})"
 else
-  echo "[vox] subindo motor ASR (CPU)… modelo: $(basename "$MODELO")"
+  echo "[vox] subindo motor ASR (CPU)… modelo: Haku ASR"
   "$NEMO" serve --asr-model "$MODELO" --device cpu --no-ui \
        --host 127.0.0.1 --port "$PORTA_MOTOR" > /tmp/vox-motor.log 2>&1 &
   PIDS+=($!)

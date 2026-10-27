@@ -313,7 +313,7 @@ function configurarTelao() {
 }
 
 function formatarTranscricao() {
-  const cab = `Vox ao Vivo — sala ${S.sala}\nMotor: NVIDIA Nemotron 3.5 ASR (CPU local)\n${"-".repeat(52)}\n\n`;
+  const cab = `Vox ao Vivo — sala ${S.sala}\nMotor: Haku ASR (CPU local)\n${"-".repeat(52)}\n\n`;
   return (
     cab +
     S.finalizadas.map((f) => `[${horaBR(f.ts)}] ${f.nome}: ${f.texto}`).join("\n") +
