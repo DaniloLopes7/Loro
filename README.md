@@ -23,10 +23,10 @@
 </p>
 
 <p align="center">
-  <img src="assets/orb/orb-pausado.svg" width="110" alt="Pausado">
-  <img src="assets/orb/orb-pronto.svg" width="110" alt="Pronto">
-  <img src="assets/orb/orb-ouvindo.svg" width="110" alt="Ouvindo">
-  <img src="assets/orb/orb-processando.svg" width="110" alt="Processando">
+  <img src="assets/orb/orb-pausado.gif" width="110" alt="Pausado">
+  <img src="assets/orb/orb-pronto.gif" width="110" alt="Pronto">
+  <img src="assets/orb/orb-ouvindo.gif" width="110" alt="Ouvindo">
+  <img src="assets/orb/orb-processando.gif" width="110" alt="Processando">
 </p>
 
 <p align="center">
@@ -297,7 +297,7 @@ vox-live-transcription/
 ├── js/qrcode.min.js      # gerador de QR Code (MIT, K. Arase) — vendored
 ├── assets/loro.svg       # ícone do Loro
 ├── assets/fonts/         # fonte Inter local (woff2)
-├── assets/orb/           # SVGs de referência dos 4 estados da esfera
+├── assets/orb/           # GIFs animados dos 4 estados da esfera
 ├── assets/performance-haku-vs-nemotron.png  # gráfico comparativo de acerto
 ├── servidor.py           # HTTP estáticos + hub WS de salas + proxy p/ motor
 ├── requirements.txt      # websockets
