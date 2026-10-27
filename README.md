@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="assets/orb/orb-pronto.svg" width="140" alt="Loro — Pronto">
+  <img src="assets/loro.svg" width="140" alt="Loro">
 </p>
 
 <h1 align="center">Loro</h1>
