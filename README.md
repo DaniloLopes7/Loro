@@ -25,7 +25,7 @@
 <p align="center">
   <img src="assets/orb/orb-pausado.gif" width="110" alt="Pausado">
   <img src="assets/orb/orb-pronto.gif" width="110" alt="Pronto">
-  <img src="assets/orb/orb-ouvindo.gif" width="110" alt="Ouvindo">
+  <img src="assets/orb/orb-ouvindo-small.gif" width="110" alt="Ouvindo">
   <img src="assets/orb/orb-processando.gif" width="110" alt="Processando">
 </p>
 
@@ -46,7 +46,7 @@ O fluxo acontece dentro de uma **sala**: quem cria a sala assume a função do t
 
 O motor de reconhecimento de voz do Loro roda o **HAKU**, um modelo de ASR (*Automatic Speech Recognition*) derivado do **Nemotron 3.5 ASR Streaming 0.6B** (NVIDIA), com arquitetura **FastConformer cache-aware + RNN-T**, cerca de **600 milhões de parâmetros** e design voltado a *streaming* de baixa latência.
 
-O **HAKU** foi criado a partir do **treinamento do Nemotron 3.5 ASR para Português Brasileiro**. Além do ajuste de idioma, o modelo recebeu modificações estruturais: foram **removidas as camadas internas responsáveis pela transcrição em inglês e pela tentativa de previsão antecipada**, de modo que o HAKU transcreve **apenas em tempo real**. Também foram adicionadas **otimizações para áudio longo ou contínuo**, que passa a ser analisado em **blocos maiores de áudio**, reduzindo o custo por bloco e aumentando a eficiência do processamento.
+O **HAKU** foi criado por **Danilo Almeida Lopes**, a partir do **treinamento do Nemotron 3.5 ASR para Português Brasileiro**. Além do ajuste de idioma, o modelo recebeu modificações estruturais: foram **removidas as camadas internas responsáveis pela transcrição em inglês e pela tentativa de previsão antecipada**, de modo que o HAKU transcreve **apenas em tempo real**. Também foram adicionadas **otimizações para áudio longo ou contínuo**, que passa a ser analisado em **blocos maiores de áudio**, reduzindo o custo por bloco e aumentando a eficiência do processamento.
 
 | Característica | Valor |
 |---|---|
@@ -54,6 +54,7 @@ O **HAKU** foi criado a partir do **treinamento do Nemotron 3.5 ASR para Portugu
 | Arquitetura | FastConformer *cache-aware* + decodificador RNN-T |
 | Parâmetros | ~600 milhões (0.6B) |
 | Modelo base | Nemotron 3.5 ASR Streaming 0.6B (só inglês) |
+| Criação do HAKU | **Danilo Almeida Lopes** |
 | Modelo final | **HAKU** — fine-tune pt-BR, com as camadas de inglês e de previsão antecipada removidas |
 | Artefato da demo | GGUF q8_0 (~742 MB) — HAKU pt-BR, não distribuído |
 | Formato de execução | GGUF quantizado **q8_0** (roda em CPU, sem GPU) |
@@ -310,7 +311,7 @@ vox-live-transcription/
 
 ## Autor
 
-**Danilo Almeida Lopes** — estudante de Ciência de Dados.
+**Danilo Almeida Lopes** — estudante de Ciência de Dados e criador do modelo **HAKU**.
 
 ---
 
