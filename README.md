@@ -6,7 +6,7 @@
 
 <p align="center">
   <b>Transcrição de voz ao vivo </b><br>
-  Fale pelo celular e veja o texto aparecer palavra por palavra no telão — reconhecimento 100% local, em CPU, sem nuvem de IA
+  Fale pelo celular e veja o texto aparecer palavra por palavra no telão — reconhecimento 100% local, em CPU.
 </p>
 
 <p align="center">
