@@ -56,7 +56,7 @@ O **Haku ASR** foi criado por **Danilo Almeida Lopes**, a partir do **treinament
 | Modelo base | Nemotron 3.5 ASR Streaming 0.6B (só inglês) |
 | Criação do Haku ASR | **Danilo Almeida Lopes** |
 | Modelo final | **Haku ASR** — fine-tune pt-BR, com as camadas de inglês e de previsão antecipada removidas |
-| Tamanho do modelo | ~350 MB (GGUF q8_0) — Haku ASR pt-BR, não distribuído |
+| Tamanho do modelo | ~350 MB (GGUF q8_0) — Haku ASR pt-BR |
 | Formato de execução | GGUF quantizado **q8_0** (roda em CPU, sem GPU) |
 
 O modelo base reconhecia apenas **Inglês**. Para habilitar o reconhecimento de **Português Brasileiro**, foi realizado **fine-tuning utilizando o dataset [CORAA](https://github.com/nilc-nlp/CORAA)** (*Corpus of Annotated Audios*), um corpus brasileiro de áudio transcrito — dando origem ao **Haku ASR**.
@@ -65,8 +65,7 @@ O modelo base reconhecia apenas **Inglês**. Para habilitar o reconhecimento de 
 
 O treinamento/fine-tuning foi executado no **Google Colab Pro** (GPU). Após o treino, as camadas internas de inglês e de tentativa de previsão foram removidas, e o modelo foi convertido e quantizado para o formato **GGUF q8_0** (~350 MB) e executado localmente pelo runtime nativo **[NeMo-Speech.cpp](https://github.com/NVIDIA/NeMo-Speech.cpp)**, sem frameworks pesados de deep learning.
 
-> ⚠️ **O arquivo do Haku ASR (fine-tune em Português Brasileiro) não é distribuído.**<br>
-> Este projeto é um **demonstrativo de tecnologia** e **não um projeto finalizado**; os pesos do Haku ASR não são disponibilizados para download. A tabela acima descreve apenas as características do modelo usado na demo — ela não indica disponibilidade dos pesos. O download indicado em [Requisitos](#requisitos) é o modelo base oficial Nemotron 3.5 ASR (só-Inglês), útil para estudar o pipeline.
+> **Disponibilidade do modelo:** as características do **Haku ASR** treinado estão disponíveis nesta documentação; o download dos pesos e do arquivo GGUF não está disponível. Este projeto é um **demonstrativo de tecnologia** e não um projeto finalizado. Para estudar ou reproduzir o pipeline, utilize o modelo base oficial **Nemotron 3.5 ASR** (só-Inglês), indicado em [Requisitos](#requisitos).
 
 ### Configuração de inferência
 
@@ -169,7 +168,7 @@ O sistema é composto por quatro blocos:
 | CPU | 4+ núcleos |
 | Python | 3.10+ |
 | Runtime | [`nemo-speech`](https://github.com/NVIDIA/NeMo-Speech.cpp) |
-| Modelo | **Haku ASR** (GGUF q8_0, não distribuído) — base Nemotron 3.5 ASR para estudo; veja [O Modelo](#o-modelo--haku-asr) |
+| Modelo | **Haku ASR** (GGUF q8_0; download não disponível) — base Nemotron 3.5 ASR para estudo; veja [O Modelo](#o-modelo--haku-asr) |
 | Túnel (opcional) | [`cloudflared`](https://github.com/cloudflare/cloudflared) |
 
 Runtime nemo-speech (sem sudo; instala em `~/.local/bin/nemo-speech`):
@@ -178,7 +177,7 @@ Runtime nemo-speech (sem sudo; instala em `~/.local/bin/nemo-speech`):
 curl -fsSL https://github.com/NVIDIA/NeMo-Speech.cpp/raw/main/scripts/install.sh | sh
 ```
 
-O **Haku ASR** é o modelo pt-BR usado na demo e **não é distribuído**. Para estudar o pipeline, baixe o modelo base só-inglês (~700 MB) do Nemotron 3.5 ASR — o `iniciar.sh` procura por padrão `modelo/nemotron-3.5-asr-streaming-0.6b.q8_0.gguf`; se o seu arquivo tiver outro nome, aponte com `MODELO=<caminho> ./iniciar.sh`:
+O **Haku ASR** é o modelo pt-BR usado na demo e **não está disponível para download**. Para estudar o pipeline, baixe o modelo base só-inglês (~700 MB) do Nemotron 3.5 ASR — o `iniciar.sh` procura por padrão `modelo/nemotron-3.5-asr-streaming-0.6b.q8_0.gguf`; se o seu arquivo tiver outro nome, aponte com `MODELO=<caminho> ./iniciar.sh`:
 
 ```bash
 curl -fSL -o modelo/nemotron-speech-streaming-en-0.6b.q8_0.gguf --create-dirs \
@@ -311,9 +310,11 @@ vox-live-transcription/
 
 ---
 
-## Autor
+## Autores
 
 **Danilo Almeida Lopes** — estudante de Ciência de Dados e criador do modelo **Haku ASR**.
+
+**Murilo Saraiva Aguiar** e **Raquel Gutierrez Oliveira** — participaram da idealização e da pesquisa do projeto, incluindo a identificação do dataset [CORAA](https://github.com/nilc-nlp/CORAA); não atuaram na implementação do código.
 
 ---
 
