@@ -44,7 +44,7 @@ O fluxo acontece dentro de uma **sala**: quem cria a sala assume a função do t
 
 ## O Modelo — Haku ASR
 
-O motor de reconhecimento de voz do Loro roda o **Haku ASR**, um modelo de ASR (*Automatic Speech Recognition*) derivado do **Nemotron 3.5 ASR Streaming 0.6B** (NVIDIA), com arquitetura **FastConformer cache-aware + RNN-T**, cerca de **600 milhões de parâmetros** e design voltado a *streaming* de baixa latência.
+O motor de reconhecimento de voz do Loro roda o **Haku ASR**, um modelo de ASR (*Automatic Speech Recognition*) derivado do **Nemotron 3.5 ASR Streaming 0.6B** (NVIDIA), que usa arquitetura **FastConformer cache-aware + RNN-T** com cerca de **600 milhões de parâmetros** e design voltado a *streaming* de baixa latência.
 
 O **Haku ASR** foi criado por **Danilo Almeida Lopes**, a partir do **treinamento do Nemotron 3.5 ASR para Português Brasileiro**. Além do ajuste de idioma, o modelo recebeu modificações estruturais: foram **removidas as camadas internas responsáveis pela transcrição em inglês e pela tentativa de previsão antecipada**, de modo que o Haku ASR transcreve **apenas em tempo real**. Também foram adicionadas **otimizações para áudio longo ou contínuo**, que passa a ser analisado em **blocos maiores de áudio**, reduzindo o custo por bloco e aumentando a eficiência do processamento.
 
@@ -52,21 +52,21 @@ O **Haku ASR** foi criado por **Danilo Almeida Lopes**, a partir do **treinament
 |---|---|
 | Tarefa | Reconhecimento automático de fala (ASR) em *streaming* |
 | Arquitetura | FastConformer *cache-aware* + decodificador RNN-T |
-| Parâmetros | ~600 milhões (0.6B) |
+| Parâmetros (modelo base) | ~600 milhões (0.6B) |
 | Modelo base | Nemotron 3.5 ASR Streaming 0.6B (só inglês) |
 | Criação do Haku ASR | **Danilo Almeida Lopes** |
 | Modelo final | **Haku ASR** — fine-tune pt-BR, com as camadas de inglês e de previsão antecipada removidas |
-| Artefato da demo | GGUF q8_0 (~742 MB) — Haku ASR pt-BR, não distribuído |
+| Tamanho do modelo | ~350 MB (GGUF q8_0) — Haku ASR pt-BR, não distribuído |
 | Formato de execução | GGUF quantizado **q8_0** (roda em CPU, sem GPU) |
 
 O modelo base reconhecia apenas **Inglês**. Para habilitar o reconhecimento de **Português Brasileiro**, foi realizado **fine-tuning utilizando o dataset [CORAA](https://github.com/nilc-nlp/CORAA)** (*Corpus of Annotated Audios*), um corpus brasileiro de áudio transcrito — dando origem ao **Haku ASR**.
 
 ### Treinamento
 
-O treinamento/fine-tuning foi executado no **Google Colab Pro** (GPU). Após o treino, as camadas internas de inglês e de tentativa de previsão foram removidas, e o modelo foi convertido e quantizado para o formato **GGUF q8_0** (~742 MB) e executado localmente pelo runtime nativo **[NeMo-Speech.cpp](https://github.com/NVIDIA/NeMo-Speech.cpp)**, sem frameworks pesados de deep learning.
+O treinamento/fine-tuning foi executado no **Google Colab Pro** (GPU). Após o treino, as camadas internas de inglês e de tentativa de previsão foram removidas, e o modelo foi convertido e quantizado para o formato **GGUF q8_0** (~350 MB) e executado localmente pelo runtime nativo **[NeMo-Speech.cpp](https://github.com/NVIDIA/NeMo-Speech.cpp)**, sem frameworks pesados de deep learning.
 
-> ⚠️ **O Haku ASR (fine-tune em Português Brasileiro) não está disponível para download.**<br>
-> Este projeto é um **demonstrativo de tecnologia** e **não um projeto finalizado**; os pesos do Haku ASR não são distribuídos. O download indicado em [Requisitos](#requisitos) é o modelo base oficial Nemotron 3.5 ASR (só-Inglês), útil para estudar o pipeline.
+> ⚠️ **O arquivo do Haku ASR (fine-tune em Português Brasileiro) não é distribuído.**<br>
+> Este projeto é um **demonstrativo de tecnologia** e **não um projeto finalizado**; os pesos do Haku ASR não são disponibilizados para download. A tabela acima descreve apenas as características do modelo usado na demo — ela não indica disponibilidade dos pesos. O download indicado em [Requisitos](#requisitos) é o modelo base oficial Nemotron 3.5 ASR (só-Inglês), útil para estudar o pipeline.
 
 ### Configuração de inferência
 
