@@ -312,9 +312,11 @@ vox-live-transcription/
 
 ## Autores
 
-**Danilo Almeida Lopes** — estudante de Ciência de Dados e criador do modelo **Haku ASR**.
+**Danilo Almeida Lopes** — estudante de Ciência de Dados e **autor principal e responsável pelo desenvolvimento técnico**. Arquitetou e implementou o projeto, criou o modelo **Haku ASR**, o backend e o frontend, estruturou o código E2E, desenvolveu otimizações e novas tecnologias para o projeto.
 
-**Murilo Saraiva Aguiar** e **Raquel Gutierrez Oliveira** — participaram da idealização e da pesquisa do projeto, incluindo a identificação do dataset [CORAA](https://github.com/nilc-nlp/CORAA); não atuaram na implementação do código.
+**Murilo Saraiva Aguiar** — colaborou na idealização e na pesquisa do projeto, na identificação do dataset [CORAA](https://github.com/nilc-nlp/CORAA), nos testes e na validação do programa.
+
+**Raquel Gutierrez Oliveira** — colaborou na idealização e na pesquisa do projeto, na identificação do dataset [CORAA](https://github.com/nilc-nlp/CORAA), na revisão da documentação e nas decisões de design.
 
 ---
 
