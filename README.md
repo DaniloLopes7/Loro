@@ -314,7 +314,7 @@ vox-live-transcription/
 
 **Danilo Almeida Lopes** — estudante de Ciência de Dados e criador do modelo **Haku ASR**.
 
-**Murilo Saraiva Aguiar** e **Raquel Gutierrez Oliveira** — participaram da idealização e da pesquisa do projeto, incluindo a identificação do dataset [CORAA](https://github.com/nilc-nlp/CORAA); não atuaram na implementação do código.
+**Murilo Saraiva Aguiar** e **Raquel Gutierrez Oliveira** — participaram da idealização e da pesquisa do projeto, incluindo a identificação do dataset [CORAA](https://github.com/nilc-nlp/CORAA).
 
 ---
 
