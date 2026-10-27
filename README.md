@@ -42,32 +42,37 @@ O fluxo acontece dentro de uma **sala**: quem cria a sala assume a função do t
 
 ---
 
-## O Modelo
+## O Modelo — HAKU
 
-O motor de reconhecimento de voz utiliza o **Nemotron** (NVIDIA), um modelo de ASR (*Automatic Speech Recognition*) com arquitetura **FastConformer cache-aware + RNN-T**, cerca de **600 milhões de parâmetros** e design voltado a *streaming* de baixa latência.
+O motor de reconhecimento de voz do Loro roda o **HAKU**, um modelo de ASR (*Automatic Speech Recognition*) derivado do **Nemotron 3.5 ASR Streaming 0.6B** (NVIDIA), com arquitetura **FastConformer cache-aware + RNN-T**, cerca de **600 milhões de parâmetros** e design voltado a *streaming* de baixa latência.
+
+O **HAKU** foi criado a partir do **treinamento do Nemotron 3.5 ASR para Português Brasileiro**. Além do ajuste de idioma, o modelo recebeu modificações estruturais: foram **removidas as camadas internas responsáveis pela transcrição em inglês e pela tentativa de previsão antecipada**, de modo que o HAKU transcreve **apenas em tempo real**. Também foram adicionadas **otimizações para áudio longo ou contínuo**, que passa a ser analisado em **blocos maiores de áudio**, reduzindo o custo por bloco e aumentando a eficiência do processamento.
 
 | Característica | Valor |
 |---|---|
 | Tarefa | Reconhecimento automático de fala (ASR) em *streaming* |
 | Arquitetura | FastConformer *cache-aware* + decodificador RNN-T |
 | Parâmetros | ~600 milhões (0.6B) |
-| Modelo base | Nemotron ASR Streaming 0.6B (só inglês) |
-| Artefato da demo | GGUF q8_0 (~742 MB) — fine-tune pt-BR, não distribuído |
+| Modelo base | Nemotron 3.5 ASR Streaming 0.6B (só inglês) |
+| Modelo final | **HAKU** — fine-tune pt-BR, com as camadas de inglês e de previsão antecipada removidas |
+| Artefato da demo | GGUF q8_0 (~742 MB) — HAKU pt-BR, não distribuído |
 | Formato de execução | GGUF quantizado **q8_0** (roda em CPU, sem GPU) |
 
-O modelo base reconhecia apenas **Inglês**. Para habilitar o reconhecimento de **Português Brasileiro**, foi realizado **fine-tuning utilizando o dataset [CORAA](https://github.com/nilc-nlp/CORAA)** (*Corpus of Annotated Audios*), um corpus brasileiro de áudio transcrito.
+O modelo base reconhecia apenas **Inglês**. Para habilitar o reconhecimento de **Português Brasileiro**, foi realizado **fine-tuning utilizando o dataset [CORAA](https://github.com/nilc-nlp/CORAA)** (*Corpus of Annotated Audios*), um corpus brasileiro de áudio transcrito — dando origem ao **HAKU**.
 
 ### Treinamento
 
-O fine-tuning foi executado no **Google Colab Pro** (GPU). Após o treino, o modelo foi convertido e quantizado para o formato **GGUF q8_0** (~742 MB) e executado localmente pelo runtime nativo **[NeMo-Speech.cpp](https://github.com/NVIDIA/NeMo-Speech.cpp)**, sem frameworks pesados de deep learning.
+O treinamento/fine-tuning foi executado no **Google Colab Pro** (GPU). Após o treino, as camadas internas de inglês e de tentativa de previsão foram removidas, e o modelo foi convertido e quantizado para o formato **GGUF q8_0** (~742 MB) e executado localmente pelo runtime nativo **[NeMo-Speech.cpp](https://github.com/NVIDIA/NeMo-Speech.cpp)**, sem frameworks pesados de deep learning.
 
-> ⚠️ **O modelo treinado em Português Brasileiro não está disponível para download.**<br>
-> Este projeto é um **demonstrativo de tecnologia** e **não um projeto finalizado**; os pesos do fine-tuning não são distribuídos. O download indicado em [Requisitos](#requisitos) é o modelo base oficial (só-Inglês), útil para estudar o pipeline.
+> ⚠️ **O HAKU (fine-tune em Português Brasileiro) não está disponível para download.**<br>
+> Este projeto é um **demonstrativo de tecnologia** e **não um projeto finalizado**; os pesos do HAKU não são distribuídos. O download indicado em [Requisitos](#requisitos) é o modelo base oficial Nemotron 3.5 ASR (só-Inglês), útil para estudar o pipeline.
 
 ### Configuração de inferência
 
 - Amostragem de entrada: **16 kHz, mono, PCM 16 bits** (o celular faz o resample do áudio do navegador para essa taxa);
 - Idioma do decodificador: **pt-BR**;
+- Transcrição **estritamente em tempo real**, sem tentativa de previsão antecipada;
+- **Áudio longo ou contínuo**: analisado em **blocos maiores de áudio**, o que reduz o overhead por bloco e melhora a eficiência em sessões longas;
 - Pontuação e capitalização automáticas **ativadas**;
 - Normalização inversa de texto ativa (ex.: "19" → "dezenove");
 - Detecção automática de fim de enunciado por silêncio (*endpointing*).
@@ -78,9 +83,30 @@ O fine-tuning foi executado no **Google Colab Pro** (GPU). Após o treino, o mod
 - **FastConformer**: variação eficiente da arquitetura Conformer (convoluções + autoatenção) para codificação acústica de fala.
 - ***Cache-aware* (streaming)**: o codificador reutiliza ativações de quadros anteriores ("cache"), processando apenas os novos quadros de áudio a cada passo — elimina recomputação e reduz a latência ponta a ponta, requisito essencial para transcrição ao vivo.
 - **RNN-T** (*Recurrent Neural Network Transducer*): decodificador que emite o texto em *streaming* (token a token), permitindo exibir **resultados parciais** enquanto a pessoa ainda fala e **resultados finais** ao fim de cada enunciado.
+- **HAKU**: fine-tune pt-BR do Nemotron 3.5 ASR. As camadas internas de transcrição em inglês e de tentativa de previsão antecipada foram removidas — o modelo trabalha **apenas em tempo real**.
+- **Blocos maiores para áudio longo/contínuo**: em vez de processar o fluxo em blocos pequenos, o HAKU agrupa o áudio em blocos maiores, reduzindo o overhead por bloco e acelerando sessões longas.
 - **Quantização q8_0**: pesos em 8 bits, o que permite executar o modelo **100% local em CPU**, sem GPU e sem enviar áudio para a nuvem.
 
 </details>
+
+---
+
+## Performance — HAKU vs. modelo base
+
+A comparação abaixo mostra a **taxa de acerto** do **HAKU** (modelo otimizado, treinado com o CORAA para Português Brasileiro) em relação ao modelo base **NVIDIA Nemotron-3.5**:
+
+<p align="center">
+  <img src="assets/performance-haku-vs-nemotron.png" width="640" alt="Gráfico de taxa de acerto: HAKU 93% vs NVIDIA Nemotron-3.5 61,3%">
+</p>
+
+| Modelo | Taxa de acerto | Taxa de erro |
+|---|---|---|
+| **HAKU** (fine-tune pt-BR com CORAA) | **93,0%** | 7,0% |
+| NVIDIA Nemotron-3.5 (base) | 61,3% | 38,7% |
+
+O HAKU entrega **+31,7 pontos percentuais** de acerto — cerca de **51,7% mais acertos** em termos relativos — e reduz a taxa de erro de **38,7% para 7,0%** (queda de ≈82%).
+
+Além do treino com o CORAA, as otimizações do HAKU — remoção das camadas internas de inglês e de tentativa de previsão antecipada (transcrição apenas em tempo real) e o processamento de áudio longo/contínuo em **blocos maiores** — tornam o modelo mais enxuto e eficiente para o uso ao vivo.
 
 ---
 
@@ -93,7 +119,7 @@ O fine-tuning foi executado no **Google Colab Pro** (GPU). Após o treino, o mod
 servidor.py :8300 ── hub de salas + proxy
       │  WebSocket (loopback)
       ▼
-nemo-speech :8080 ── motor ASR Nemotron + CORAA (GGUF q8_0, CPU local)
+nemo-speech :8080 ── motor ASR HAKU (GGUF q8_0, CPU local)
       │
       ▼  broadcast: texto parcial → final
 PC / TELÃO (quem criou a sala)
@@ -111,7 +137,7 @@ PC / TELÃO (quem criou a sala)
 
 O sistema é composto por quatro blocos:
 
-1. **Motor ASR** (`nemo-speech serve`): carrega o GGUF q8_0 e expõe, apenas em *loopback* (`127.0.0.1:8080`), um WebSocket de transcrição em tempo real. Nunca é exposto à rede.
+1. **Motor ASR** (`nemo-speech serve`): carrega o GGUF q8_0 do **HAKU** e expõe, apenas em *loopback* (`127.0.0.1:8080`), um WebSocket de transcrição em tempo real. Nunca é exposto à rede.
 2. **Hub da aplicação** (`servidor.py`, Python + `websockets`): em uma única porta (`8300`) entrega a interface estática, administra **salas** (código curto de 4 caracteres), controla **papéis** (um locutor por sala; espectadores ilimitados), faz *proxy* do áudio do locutor ao motor, *broadcast* dos eventos de texto e **métricas** (latência de finalização; velocidade em múltiplos do tempo real).
 3. **Interface web** (HTML/CSS/JS, sem framework/build): três telas — *home* (criar/entrar), *telão* (código + QR + chat em tempo real + métricas + exportação) e *celular* (captura do microfone com AudioWorklet, "segurar para falar", modo "fala livre", esfera reativa à voz).
 4. **Exposição pública** (Cloudflare Tunnel): gera uma URL `https://…trycloudflare.com` que aponta para a aplicação local. O HTTPS é requisito dos navegadores para liberar o microfone fora de `localhost`.
@@ -142,7 +168,7 @@ O sistema é composto por quatro blocos:
 | CPU | 4+ núcleos |
 | Python | 3.10+ |
 | Runtime | [`nemo-speech`](https://github.com/NVIDIA/NeMo-Speech.cpp) |
-| Modelo | GGUF q8_0 — veja [O Modelo](#o-modelo) |
+| Modelo | **HAKU** (GGUF q8_0, não distribuído) — base Nemotron 3.5 ASR para estudo; veja [O Modelo](#o-modelo--haku) |
 | Túnel (opcional) | [`cloudflared`](https://github.com/cloudflare/cloudflared) |
 
 Runtime nemo-speech (sem sudo; instala em `~/.local/bin/nemo-speech`):
@@ -151,7 +177,7 @@ Runtime nemo-speech (sem sudo; instala em `~/.local/bin/nemo-speech`):
 curl -fsSL https://github.com/NVIDIA/NeMo-Speech.cpp/raw/main/scripts/install.sh | sh
 ```
 
-Modelo base só-inglês (~700 MB) — o `iniciar.sh` procura por padrão `modelo/nemotron-3.5-asr-streaming-0.6b.q8_0.gguf`; se o seu arquivo tiver outro nome, aponte com `MODELO=<caminho> ./iniciar.sh`:
+O **HAKU** é o modelo pt-BR usado na demo e **não é distribuído**. Para estudar o pipeline, baixe o modelo base só-inglês (~700 MB) do Nemotron 3.5 ASR — o `iniciar.sh` procura por padrão `modelo/nemotron-3.5-asr-streaming-0.6b.q8_0.gguf`; se o seu arquivo tiver outro nome, aponte com `MODELO=<caminho> ./iniciar.sh`:
 
 ```bash
 curl -fSL -o modelo/nemotron-speech-streaming-en-0.6b.q8_0.gguf --create-dirs \
@@ -264,15 +290,20 @@ vox-live-transcription/
 ├── js/app.js             # estado, WebSocket, salas, chat palavra a palavra
 ├── js/captura.js         # microfone → PCM16 16 kHz (resample linear)
 ├── js/audio-worklet.js   # AudioWorkletProcessor (blocos + nível RMS)
-├── js/esfera.js          # esfera de voz em canvas (reage ao áudio real)
-├── js/tema.js            # tema claro/escuro (segue o sistema, persistido)
+├── js/esfera.js          # esfera de voz (CSS) que reage ao áudio real
+├── js/tema.js            # tema automático/claro/escuro (segue o sistema, persistido)
+├── js/ui.js              # ajustes de interface e acessibilidade
+├── js/config.js          # configuração opcional do app
 ├── js/qrcode.min.js      # gerador de QR Code (MIT, K. Arase) — vendored
+├── assets/loro.svg       # ícone do Loro
+├── assets/fonts/         # fonte Inter local (woff2)
 ├── assets/orb/           # SVGs de referência dos 4 estados da esfera
+├── assets/performance-haku-vs-nemotron.png  # gráfico comparativo de acerto
 ├── servidor.py           # HTTP estáticos + hub WS de salas + proxy p/ motor
 ├── requirements.txt      # websockets
 ├── iniciar.sh            # motor (:8080) + aplicação (:8300)
 ├── expor.sh              # Cloudflare Tunnel → link público HTTPS
-└── modelo/               # GGUF do modelo (ignorado pelo git)
+└── modelo/               # GGUF do HAKU (ignorado pelo git)
 ```
 
 ---
@@ -286,6 +317,7 @@ vox-live-transcription/
 ## Licenças
 
 - Código deste repositório: uso livre no contexto do projeto
-- Modelo Nemotron ASR Streaming (só-inglês): licença [NVIDIA Open Model License](https://www.nvidia.com/en-us/agreements/enterprise-software/nvidia-open-model-license/)
+- Modelo base Nemotron 3.5 ASR Streaming (só-inglês): licença [NVIDIA Open Model License](https://www.nvidia.com/en-us/agreements/enterprise-software/nvidia-open-model-license/)
+- **HAKU** (fine-tune pt-BR do Nemotron 3.5 ASR): derivado do modelo base sob os mesmos termos; pesos não distribuídos
 - Dataset [CORAA](https://github.com/nilc-nlp/CORAA): ver termos de uso público do corpus
 - Componentes: NeMo-Speech.cpp e cloudflared (Apache-2.0), qrcode-generator (MIT)
