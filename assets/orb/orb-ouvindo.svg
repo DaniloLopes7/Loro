@@ -1,5 +1,11 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240" width="240" height="240" role="img" aria-label="Esfera do Loro: ouvindo">
   <title>Ouvindo</title>
-  <circle cx="120" cy="120" r="120" fill="#FDECEC"/>
-  <circle cx="120" cy="120" r="72" fill="#E8383D"/>
+  <g transform="translate(120 120)">
+    <circle r="120" fill="#FDECEC">
+      <animateTransform attributeName="transform" type="scale" values="0.94;1;0.94" keyTimes="0;0.5;1" dur="2.4s" calcMode="spline" keySplines="0.45 0 0.55 1;0.45 0 0.55 1" repeatCount="indefinite"/>
+    </circle>
+    <circle r="72" fill="#E8383D">
+      <animateTransform attributeName="transform" type="scale" values="1;1.06;1" keyTimes="0;0.5;1" dur="1.2s" calcMode="spline" keySplines="0.4 0 0.2 1;0.4 0 0.2 1" repeatCount="indefinite"/>
+    </circle>
+  </g>
 </svg>

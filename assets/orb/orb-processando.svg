@@ -1,5 +1,11 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240" width="240" height="240" role="img" aria-label="Esfera do Loro: processando">
   <title>Processando</title>
-  <circle cx="120" cy="120" r="72" fill="#1B7F4B"/>
-  <circle cx="120" cy="120" r="108" fill="none" stroke="#1B7F4B" stroke-width="7.2" stroke-linecap="round" stroke-dasharray="169.65 508.94" transform="rotate(-90 120 120)"/>
+  <g transform="translate(120 120)">
+    <circle r="72" fill="#1B7F4B">
+      <animateTransform attributeName="transform" type="scale" values="1;1.03;1" keyTimes="0;0.5;1" dur="2s" calcMode="spline" keySplines="0.45 0 0.55 1;0.45 0 0.55 1" repeatCount="indefinite"/>
+    </circle>
+  </g>
+  <circle cx="120" cy="120" r="108" fill="none" stroke="#1B7F4B" stroke-width="7.2" stroke-linecap="round" stroke-dasharray="169.65 508.94">
+    <animateTransform attributeName="transform" type="rotate" from="-90 120 120" to="270 120 120" dur="1.4s" repeatCount="indefinite"/>
+  </circle>
 </svg>

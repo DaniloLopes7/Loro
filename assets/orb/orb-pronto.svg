@@ -1,4 +1,8 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240" width="240" height="240" role="img" aria-label="Esfera do Loro: pronto">
   <title>Pronto</title>
-  <circle cx="120" cy="120" r="72" fill="#1B7F4B"/>
+  <g transform="translate(120 120)">
+    <circle r="72" fill="#1B7F4B">
+      <animateTransform attributeName="transform" type="scale" values="1;1.04;1" keyTimes="0;0.5;1" dur="4s" calcMode="spline" keySplines="0.45 0 0.55 1;0.45 0 0.55 1" repeatCount="indefinite"/>
+    </circle>
+  </g>
 </svg>
